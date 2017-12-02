@@ -1,4 +1,5 @@
 #!/bin/bash
+
 ##### INPUT #####
 ##Modify this accordingly
 main="main" #main source file
@@ -9,7 +10,6 @@ fig_f="figures/" #folder with figures
 ##Modify this with your preferred file names
 upload="no_comments" #tex file without comments
 archive="all.tar" #compress files so you can upload a single tar
-
 
 #Removing all comments from the source
 perl -pe 's/(^|[^\\])%.*/\1%/' < $main.tex > $upload.tex
