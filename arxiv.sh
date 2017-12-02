@@ -1,9 +1,15 @@
 #!/bin/bash
+##### INPUT #####
+##Modify this accordingly
 main="main" #main source file
 bib="biblio" #bib file
 fig_f="figures/" #folder with figures
-upload="no_comments" #file without comments
+
+##### OUTPUT #####
+##Modify this with your preferred file names
+upload="no_comments" #tex file without comments
 archive="all.tar" #compress files so you can upload a single tar
+
 
 #Removing all comments from the source
 perl -pe 's/(^|[^\\])%.*/\1%/' < $main.tex > $upload.tex
@@ -19,9 +25,9 @@ echo $r
 perl -pi -e "s/$s/$r/g" $upload.tex
 
 ##Remove Copyright
-#perl -pi -e 's/\\begin{document}/\\makeatletter\n\\def\\\@copyrightspace{\\relax}\n\\makeatother\n\\begin{document} /g' $upload
+perl -pi -e 's/\\begin{document}/\\makeatletter\n\\def\\\@copyrightspace{\\relax}\n\\makeatother\n\\begin{document} /g' $upload.tex
 
-##Print the list of figures
+##Remove all figures not used in the tex file
 cat $upload.tex | grep includegraphics | awk -F"[{}]" '{print $2}' | tar -cvf temp.tar -T -
 tar cf - $fig_f/ | xz -9 -zf - > _figs_backup.tar.xz
 rm -rf $fig_f
