@@ -1,16 +1,20 @@
 #!/bin/bash
-#!/bin/bash
 
 ##### INPUT #####
 ##Modify this accordingly
-main="main" #main source file
-bib="biblio" #bib file
-fig_f="figures/" #folder with figures
+#main source file
+main="main"
+#bib file
+bib="biblio"
+#folder with figures
+fig_f="figures/"
 
 ##### OUTPUT #####
 ##Modify this with your preferred file names
-upload="no_comments" #tex file without comments
-archive="all.tar" #compress files so you can upload a single tar
+#tex file without comments
+upload="no_comments"
+#compress files so you can upload a single tar
+archive="all.tar"
 
 ##If only minor changes to main
 minor=0
@@ -22,6 +26,7 @@ perl -pe 's/(^|[^\\])%.*/\1%/' < $main.tex > $upload.tex
 pdflatex $upload.tex
 bibtex $upload
 
+#Switch from using the bibfile to including a bbl as requested by ArXiv
 s='\\bibliography{'$bib'}'
 r='%'$s'\n\\input{'$upload.bbl'}'
 echo $s
@@ -31,7 +36,7 @@ perl -pi -e "s/$s/$r/g" $upload.tex
 ##Remove Copyright
 perl -pi -e 's/\\begin{document}/\\makeatletter\n\\def\\\@copyrightspace{\\relax}\n\\makeatother\n\\begin{document} /g' $upload
 
-##Print the list of figures
+##Get the list of figures so you can remove unnecessary ones from the figures folder
 if [ "$minor" -ne 1 ]
 then
 cat $upload.tex | grep includegraphics | awk -F"[{}]" '{print $2}' | tar -cvf temp.tar -T -
@@ -41,10 +46,11 @@ tar xf temp.tar
 rm -rf temp.tar
 fi
 
-##Compiling again
+##Final compilation
 pdflatex $upload.tex
 pdflatex $upload.tex
 
+##Creating an archive with (hopefully) all files
 if [ "$minor" -ne 1 ]
 then
 tar -cvzf $archive $upload.tex $upload.bbl *.cls $fig_f
