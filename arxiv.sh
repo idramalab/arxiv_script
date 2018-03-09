@@ -53,7 +53,7 @@ pdflatex $upload.tex
 ##Creating an archive with (hopefully) all files
 if [ "$minor" -ne 1 ]
 then
-tar -cvzf $archive $upload.tex $upload.bbl *.cls $fig_f
+tar -cvzf $archive $upload.tex $upload.bbl $fig_f *.cls
 fi
 
 ##Cleaning up
