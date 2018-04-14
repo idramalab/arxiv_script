@@ -34,6 +34,7 @@ pdflatex $upload.tex
 pdflatex $upload.tex
 
 ##Creating an archive with (hopefully) all files
+rm -rf $archive
 tar -cvzf $archive $upload.tex $upload.bbl $fig_f *.cls
 
 ##Cleaning up
